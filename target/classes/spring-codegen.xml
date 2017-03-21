@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd" default-lazy-init="true">
+
+	<bean id="MySql" class="com.lee.codegen.generator.impl.DatabaseGenerator">
+		<property name="packageGenerator" ref="PackageGenerator"/>
+		<property name="tableGenerator" ref="TableGenerator"/>
+		<!-- 
+		<property name="contextGenerators">
+			<list>
+				<ref bean="IbatisMapGeneratorPlugin"/>
+				<ref bean="SpringConfigContextGenerator"/>
+			</list>
+		</property>
+		 -->
+	</bean>
+	<!--
+	<bean id="SpringConfigContextGenerator" class="com.sinotn.codegen.genter.plugins.SpringConfigContextGenerator">
+		<property name="springConfigTemplate" value="SpringContext.ftl"/>
+	</bean>
+	-->
+	
+	<bean id="PackageGenerator" class="com.lee.codegen.generator.impl.PackageGenerator">
+		<property name="tableGenerator" ref="TableGenerator"/>
+		<property name="templateName" value="package.ftl"/>
+		<property name="packageHtmlName" value="package.html"/>
+	</bean>
+	<bean id="TableGenerator" class="com.lee.codegen.generator.impl.TableGenerator">
+		<!-- 数据定义对象到生成定义转换器 -->
+		<property name="genDefConverter" ref="GenerateDefinitionConvertImpl"/>
+		<property name="plugins"><!-- 生成插件 -->
+			<list>
+				<ref bean="SimpleVOGeneratorPlugin"/>
+				<!--
+				<ref bean="DaoIbatisGeneratorPlugin"/>
+				<ref bean="ExtractorGeneratorPlugin"/>
+				<ref bean="ServiceInterfaceGeneratorPlugin" />
+				-->
+			</list>
+		</property>
+	</bean>
+	<bean id="GenerateDefinitionConvertImpl" class="com.lee.codegen.generator.convert.GenerateDefinitionConvertImpl">
+		<property name="convertPluginList">
+			<list>
+				<ref bean="MySqlGenDefConvertPlugin"/>
+				<ref bean="ClassNameConvertPlugin"/>
+			</list>
+		</property>
+	</bean>
+	<bean id="ClassNameConvertPlugin" class="com.lee.codegen.generator.plugin.impl.ClassNameConvertPlugin"></bean>
+	<!-- 数据定义对象到生成定义转换器 -->
+	<bean id="MySqlGenDefConvertPlugin" class="com.lee.codegen.generator.plugin.impl.MySqlGenDefConvertPlugin">
+		<property name="fieldConverts">
+			<list>
+				<bean class="com.lee.codegen.generator.convert.mysql.StringConvert"/>
+				<bean class="com.lee.codegen.generator.convert.mysql.DateConvert"/>
+				<bean class="com.lee.codegen.generator.convert.mysql.ByteConvert"/>
+				<bean class="com.lee.codegen.generator.convert.mysql.IntegerConvert"/>
+				<bean class="com.lee.codegen.generator.convert.mysql.LongConvert"/>
+				<bean class="com.lee.codegen.generator.convert.mysql.NumericConvert"/>
+				<bean class="com.lee.codegen.generator.convert.mysql.DoubleConvert"/>
+				<bean class="com.lee.codegen.generator.convert.mysql.BooleanConvert"/>
+				<bean class="com.lee.codegen.generator.convert.FieldNameConvert"/>
+			</list>
+		</property>
+	</bean>
+	<!-- 简单VO类生成插件 -->
+	<bean id="SimpleVOGeneratorPlugin" class="com.lee.codegen.generator.plugin.impl.EntityVoGeneratorPlugin">
+		<property name="templateName" value="entity.ftl"/>
+		<property name="voSuffix" value="VO"/>
+		<property name="subPackageName" value="vo"/>
+	</bean>
+
+	<!-- Ibatis映射文件生成插件
+	<bean id="IbatisMapGeneratorPlugin" class="com.lee.codegen.generator.plugins.IbatisMapGeneratorPlugin">
+		<property name="ibatisMapTemplate" value="unitIbatisMap.ftl"/>
+		<property name="ibatisConfigTemplate" value="ibatisConfig.ftl"/>
+	</bean> -->
+	<!-- dao接口文件生成插件
+	<bean id="DaoInterfaceGeneratorPlugin" class="com.lee.codegen.generator.plugins.DaoInterfaceGeneratorPlugin">
+		<property name="templateName" value="sinotnDaoInterface.ftl"/>
+		<property name="subPackageName" value="dao"/>
+		<property name="prefix" value="I"/>
+		<property name="suffix" value="Dao"/>
+	</bean> -->
+	<!-- service接口文件生成插件
+	<bean id="ServiceInterfaceGeneratorPlugin" class="com.lee.codegen.generator.plugins.ServiceInterfaceGeneratorPlugin">
+		<property name="templateName" value="sinotnServiceInterface.ftl"/>
+		<property name="subPackageName" value="service"/>
+		<property name="prefix" value="I"/>
+		<property name="suffix" value="Service"/>
+	</bean> -->
+	<!-- dao接口Ibatis实现类文件生成插件
+	<bean id="DaoIbatisGeneratorPlugin" class="com.lee.codegen.generator.plugins.DaoIbatisGeneratorPlugin">
+		<property name="templateName" value="unitDaoIbatis.ftl"/>
+		<property name="suffix" value="DaoImpl"/>
+		<property name="dependentPlugins">
+			<list>
+				<ref bean="DaoInterfaceGeneratorPlugin"/>
+			</list>
+		</property>
+	</bean> -->
+	<!-- dao接口文件生成插件
+	<bean id="ExtractorGeneratorPlugin" class="com.lee.codegen.generator.plugins.ExtractorGeneratorPlugin">
+		<property name="templateName" value="sinotnExtractor.ftl"/>
+		<property name="subPackageName" value="extractor"/>
+		<property name="prefix" value=""/>
+		<property name="suffix" value="Extractor"/>
+		<property name="dependentPlugins">
+			<list>
+				<ref bean="DaoInterfaceGeneratorPlugin"/>
+			</list>
+		</property>
+	</bean> -->
+</beans>

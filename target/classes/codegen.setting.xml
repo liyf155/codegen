@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeGen>
+    <!-- 代码输出路径 -->
+    <outputDir>/Users/kevinlee/Desktop/output</outputDir>
+    <!-- pdm文件路径 -->
+    <pdmPath>/Users/kevinlee/Desktop/test.pdm</pdmPath>
+    <!-- 数据库类型 -->
+    <databaseType>MySql</databaseType>
+    <!-- 代码模板路径 -->
+    <freemarkTemplateDir>/Users/kevinlee/GitHub/tools/codegen/src/main/resources/template</freemarkTemplateDir>
+    <!-- 字符编码 -->
+    <freemarkCharset>UTF-8</freemarkCharset>
+    <!-- 数据库表，用逗号分隔开 -->
+    <excludeTable></excludeTable>
+    <includeTable>DT_ANSWER_PAPER;DT_INVIGILATE_ITEM;DT_INVIGILATOR_SIGN</includeTable>
+    <!-- package设置,最好是maven中的groupId -->
+    <basePackage>com.lee.codegen</basePackage>
+    <!-- 开发者信息设置 -->
+    <GenMeta>
+        <property key="author" value="kevinlee"/>
+        <property key="email" value="liyf155@gmail.com"/>
+    </GenMeta>
+</CodeGen>
